@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Prediction{% endblock %}
+{% block subtitle %}Estimate the readmission risk of a patient encounter{% endblock %}
+{% block content %}
+{% if errors._model %}<div class="alert alert-error">{{ errors._model }}</div>{% endif %}
+{% if errors and not errors._model %}<div class="alert alert-error"><b>Please correct {{ errors|length }} field(s)</b> - they are highlighted below (open sections may need expanding).</div>{% endif %}
+
+{% if result %}
+<div class="result {{ 'pos' if result.prediction == 1 else 'neg' }}">
+  <div class="eyebrow">Prediction</div>
+  <h2>{{ 'Likely to be readmitted' if result.prediction == 1 else 'Not likely to be readmitted' }}</h2>
+  {% if result.probability is not none %}
+  <div class="small">Probability of readmission: <b>{{ '%.1f'|format(result.probability * 100) }}%</b></div>
+  <div class="prob-bar"><i style="width:{{ '%.1f'|format(result.probability * 100) }}%"></i></div>
+  {% endif %}
+  <div class="meta"><div>Predicted class<b>{{ result.label }}</b></div><div>Model used<b>{{ result.model_name }}</b></div>
+    <div>Model ROC-AUC (test)<b>{{ result.auc|score }}</b></div></div>
+</div>
+<div class="card"><h3>Input summary</h3>
+  <div class="table-wrap"><table class="data"><tbody>{% for label, val in result.summary %}<tr><td class="muted">{{ label }}</td><td><b>{{ val }}</b></td></tr>{% endfor %}</tbody></table></div>
+  <p class="chart-caption">Diagnoses, lab results and medication fields were used as entered below. The same saved preprocessing pipeline used for training was applied. This is a statistical estimate for educational use, not medical advice.</p></div>
+{% endif %}
+
+<form method="post" action="{{ url_for('prediction') }}" novalidate>
+  <div class="card"><div class="grid grid-2" style="align-items:end">
+    <div><label for="model">Model</label><select name="model" id="model">{% for o in options %}<option value="{{ o.slug }}" {{ 'selected' if o.slug == chosen }}>{{ o.name }}</option>{% endfor %}</select></div>
+    <p class="muted small mb0">Fields start with typical values (median / most common value in the training data). Change the ones that describe your patient.</p></div></div>
+
+  {% for title, g in groups.items() %}
+  <details class="group" {{ 'open' if g.open or (g.fields|selectattr('name', 'in', errors)|list) }}>
+    <summary>{{ title }} <span class="badge">{{ g.fields|length }} fields</span></summary>
+    <div class="form-grid">
+      {% for f in g.fields %}
+      <div class="field {{ 'error' if errors[f.name] }}">
+        <label for="f_{{ loop.index }}_{{ title|replace(' ', '') }}">{{ f.label }}</label>
+        {% if f.kind == 'number' %}
+        <input type="number" step="1" min="{{ f.min|int }}" max="{{ f.max|int }}" name="{{ f.name }}" id="f_{{ loop.index }}_{{ title|replace(' ', '') }}" value="{{ values[f.name] }}">
+        <div class="muted small">Range in data: {{ f.min|int }} - {{ f.max|int }}</div>
+        {% else %}
+        <select name="{{ f.name }}" id="f_{{ loop.index }}_{{ title|replace(' ', '') }}">{% for o in f.options %}<option value="{{ o.value }}" {{ 'selected' if o.value == values[f.name] }}>{{ o.label }}</option>{% endfor %}</select>
+        {% endif %}
+        {% if errors[f.name] %}<div class="field-error">{{ errors[f.name] }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endfor %}
+
+  <div style="display:flex;gap:12px;margin-top:8px"><button class="btn" type="submit">Predict</button><a class="btn btn-outline" href="{{ url_for('prediction') }}">Reset</a></div>
+</form>
+{% endblock %}

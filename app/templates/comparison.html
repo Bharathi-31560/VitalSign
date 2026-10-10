@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Model Comparison{% endblock %}
+{% block subtitle %}All supervised models on the same held-out test set{% endblock %}
+{% block content %}
+{% set best = ranked[0] %}
+<div class="alert alert-ok"><b>Best model: {{ best.name }}</b> - selected by {{ res.best_criterion }}. ROC-AUC is threshold-independent and robust to the moderate class imbalance, so it is used to rank models; the other metrics are shown for context. The saved <code>models/best_model.pkl</code> is this model.</div>
+
+<div class="card"><h2>Metrics table</h2>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>#</th><th>Model</th><th class="num">Accuracy</th><th class="num">Precision</th><th class="num">Recall</th><th class="num">F1</th><th class="num">AUC</th><th class="num">Train time</th><th></th></tr></thead>
+    <tbody>{% for m in ranked %}<tr class="{{ 'best' if loop.first }}"><td>{{ loop.index }}</td><td>{{ m.name }}{% if loop.first %} <span class="badge badge-teal">Best</span>{% endif %}</td>
+      <td class="num">{{ m.accuracy|score }}</td><td class="num">{{ m.precision|score }}</td><td class="num">{{ m.recall|score }}</td><td class="num">{{ m.f1|score }}</td><td class="num">{{ m.roc_auc|score }}</td><td class="num">{{ m.train_time_sec }}s</td>
+      <td><a class="btn btn-outline btn-sm" href="{{ url_for('evaluation', model=m.slug) }}">Evaluate</a></td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% if res.errors %}<p class="chart-caption">Models that failed to train: {{ res.errors.keys()|join(', ') }}.</p>{% endif %}
+  <p class="chart-caption">KNN and SVM were trained on a stratified subsample of the training data (see their model pages) for speed; all models are tested on the same full test set.</p></div>
+
+<div class="grid grid-2">
+  <div class="card chart"><h3>Metric comparison</h3><img src="{{ url_for('static', filename='charts/model_comparison.png') }}" alt="Model comparison"></div>
+  <div class="card chart"><h3>ROC curves</h3><img src="{{ url_for('static', filename='charts/roc_curves.png') }}" alt="ROC curves"></div>
+</div>
+
+<div class="card"><h2>Unsupervised models (not comparable by accuracy)</h2>
+  <div class="table-wrap"><table class="data"><thead><tr><th>Model</th><th>Result</th><th>Quality</th><th></th></tr></thead><tbody>
+  {% if km %}<tr><td><b>K-Means</b></td><td>{{ km.k }} clusters, readmission rate per cluster {{ km.clusters|map(attribute='readmit_rate')|min }}% - {{ km.clusters|map(attribute='readmit_rate')|max }}%</td><td>silhouette {{ km.silhouette|score }}</td><td><a class="btn btn-outline btn-sm" href="{{ url_for('model_detail', slug='kmeans') }}">View</a></td></tr>{% endif %}
+  {% if db %}<tr><td><b>DBSCAN</b></td><td>{{ db.n_clusters }} cluster(s), {{ db.n_noise|num }} noise points ({{ db.noise_pct }}%)</td><td>eps {{ '%.2f'|format(db.eps) }}, min_samples {{ db.min_samples }}</td><td><a class="btn btn-outline btn-sm" href="{{ url_for('model_detail', slug='dbscan') }}">View</a></td></tr>{% endif %}
+  </tbody></table></div>
+  <p class="chart-caption">Clustering has no "correct" labels to score against, so it is evaluated with silhouette / cluster profiles and used to understand patient groups rather than to predict.</p></div>
+{% endblock %}

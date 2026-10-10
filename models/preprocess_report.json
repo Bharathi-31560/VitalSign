@@ -1,0 +1,512 @@
+{
+ "original_shape": [
+  101766,
+  50
+ ],
+ "cleaned_shape": [
+  69987,
+  46
+ ],
+ "steps": [
+  {
+   "step": "Remove duplicate rows",
+   "detail": "Exact duplicate records",
+   "rows_before": 101766,
+   "rows_after": 101766,
+   "removed": 0
+  },
+  {
+   "step": "Remove invalid gender",
+   "detail": "Rows with gender = 'Unknown/Invalid'",
+   "rows_before": 101766,
+   "rows_after": 101763,
+   "removed": 3
+  },
+  {
+   "step": "Remove expired / hospice discharges",
+   "detail": "These patients cannot be readmitted, so they would bias the target",
+   "rows_before": 101763,
+   "rows_after": 99340,
+   "removed": 2423
+  },
+  {
+   "step": "Keep first encounter per patient",
+   "detail": "Prevents the same patient appearing in both train and test sets (leakage)",
+   "rows_before": 99340,
+   "rows_after": 69987,
+   "removed": 29353
+  }
+ ],
+ "dropped_columns": [
+  {
+   "column": "encounter_id",
+   "reason": "identifier - not a clinical feature"
+  },
+  {
+   "column": "patient_nbr",
+   "reason": "identifier - not a clinical feature"
+  },
+  {
+   "column": "weight",
+   "reason": "96% missing values"
+  },
+  {
+   "column": "examide",
+   "reason": "constant column (single value)"
+  },
+  {
+   "column": "citoglipton",
+   "reason": "constant column (single value)"
+  },
+  {
+   "column": "glimepiride-pioglitazone",
+   "reason": "constant column (single value)"
+  }
+ ],
+ "missing_before": {
+  "race": 2273,
+  "weight": 98569,
+  "payer_code": 40256,
+  "medical_specialty": 49949,
+  "diag_1": 21,
+  "diag_2": 358,
+  "diag_3": 1423
+ },
+ "missing_before_total": 192849,
+ "filled_unknown": {
+  "race": 1917,
+  "payer_code": 30415,
+  "medical_specialty": 33652
+ },
+ "missing_after_cleaning": 0,
+ "derived": [
+  "age_num: numeric mid-point of the age band (e.g. [50-60) -> 55)",
+  "diag_1 / diag_2 / diag_3: ICD-9 codes grouped into broad clinical groups",
+  "readmitted_any: 1 if readmitted (<30 or >30 days), 0 if not readmitted",
+  "admission_type_id / discharge_disposition_id / admission_source_id: treated as categories, not numbers"
+ ],
+ "features": [
+  "race",
+  "gender",
+  "admission_type_id",
+  "discharge_disposition_id",
+  "admission_source_id",
+  "time_in_hospital",
+  "payer_code",
+  "medical_specialty",
+  "num_lab_procedures",
+  "num_procedures",
+  "num_medications",
+  "number_outpatient",
+  "number_emergency",
+  "number_inpatient",
+  "diag_1",
+  "diag_2",
+  "diag_3",
+  "number_diagnoses",
+  "max_glu_serum",
+  "A1Cresult",
+  "metformin",
+  "repaglinide",
+  "nateglinide",
+  "chlorpropamide",
+  "glimepiride",
+  "acetohexamide",
+  "glipizide",
+  "glyburide",
+  "tolbutamide",
+  "pioglitazone",
+  "rosiglitazone",
+  "acarbose",
+  "miglitol",
+  "troglitazone",
+  "tolazamide",
+  "insulin",
+  "glyburide-metformin",
+  "glipizide-metformin",
+  "metformin-rosiglitazone",
+  "metformin-pioglitazone",
+  "change",
+  "diabetesMed",
+  "age_num"
+ ],
+ "numeric_features": [
+  "time_in_hospital",
+  "num_lab_procedures",
+  "num_procedures",
+  "num_medications",
+  "number_outpatient",
+  "number_emergency",
+  "number_inpatient",
+  "number_diagnoses",
+  "age_num"
+ ],
+ "categorical_features": [
+  "race",
+  "gender",
+  "admission_type_id",
+  "discharge_disposition_id",
+  "admission_source_id",
+  "payer_code",
+  "medical_specialty",
+  "diag_1",
+  "diag_2",
+  "diag_3",
+  "max_glu_serum",
+  "A1Cresult",
+  "metformin",
+  "repaglinide",
+  "nateglinide",
+  "chlorpropamide",
+  "glimepiride",
+  "acetohexamide",
+  "glipizide",
+  "glyburide",
+  "tolbutamide",
+  "pioglitazone",
+  "rosiglitazone",
+  "acarbose",
+  "miglitol",
+  "troglitazone",
+  "tolazamide",
+  "insulin",
+  "glyburide-metformin",
+  "glipizide-metformin",
+  "metformin-rosiglitazone",
+  "metformin-pioglitazone",
+  "change",
+  "diabetesMed"
+ ],
+ "n_encoded_features": 143,
+ "n_final_features": 152,
+ "scaled_check": [
+  {
+   "feature": "time_in_hospital",
+   "mean": 0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "num_lab_procedures",
+   "mean": -0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "num_procedures",
+   "mean": 0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "num_medications",
+   "mean": 0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "number_outpatient",
+   "mean": 0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "number_emergency",
+   "mean": 0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "number_inpatient",
+   "mean": -0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "number_diagnoses",
+   "mean": -0.0,
+   "std": 1.0
+  },
+  {
+   "feature": "age_num",
+   "mean": -0.0,
+   "std": 1.0
+  }
+ ],
+ "train_size": 55989,
+ "test_size": 13998,
+ "test_fraction": 0.2,
+ "train_balance": {
+  "Not readmitted": 33180,
+  "Readmitted": 22809
+ },
+ "test_balance": {
+  "Not readmitted": 8296,
+  "Readmitted": 5702
+ },
+ "encoded_cardinality": [
+  {
+   "feature": "race",
+   "categories_after_encoding": 6
+  },
+  {
+   "feature": "gender",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "admission_type_id",
+   "categories_after_encoding": 8
+  },
+  {
+   "feature": "discharge_disposition_id",
+   "categories_after_encoding": 21
+  },
+  {
+   "feature": "admission_source_id",
+   "categories_after_encoding": 16
+  },
+  {
+   "feature": "payer_code",
+   "categories_after_encoding": 17
+  },
+  {
+   "feature": "medical_specialty",
+   "categories_after_encoding": 71
+  },
+  {
+   "feature": "diag_1",
+   "categories_after_encoding": 10
+  },
+  {
+   "feature": "diag_2",
+   "categories_after_encoding": 10
+  },
+  {
+   "feature": "diag_3",
+   "categories_after_encoding": 10
+  },
+  {
+   "feature": "max_glu_serum",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "A1Cresult",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "metformin",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "repaglinide",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "nateglinide",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "chlorpropamide",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "glimepiride",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "acetohexamide",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "glipizide",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "glyburide",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "tolbutamide",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "pioglitazone",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "rosiglitazone",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "acarbose",
+   "categories_after_encoding": 3
+  },
+  {
+   "feature": "miglitol",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "troglitazone",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "tolazamide",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "insulin",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "glyburide-metformin",
+   "categories_after_encoding": 4
+  },
+  {
+   "feature": "glipizide-metformin",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "metformin-rosiglitazone",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "metformin-pioglitazone",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "change",
+   "categories_after_encoding": 2
+  },
+  {
+   "feature": "diabetesMed",
+   "categories_after_encoding": 2
+  }
+ ],
+ "sample_before": {
+  "columns": [
+   "race",
+   "age",
+   "time_in_hospital",
+   "num_medications",
+   "diag_1",
+   "insulin",
+   "readmitted"
+  ],
+  "rows": [
+   [
+    "Caucasian",
+    "[0-10)",
+    1,
+    1,
+    "250.83",
+    "No",
+    "NO"
+   ],
+   [
+    "Caucasian",
+    "[10-20)",
+    3,
+    18,
+    "276",
+    "Up",
+    ">30"
+   ],
+   [
+    "AfricanAmerican",
+    "[20-30)",
+    2,
+    13,
+    "648",
+    "No",
+    "NO"
+   ],
+   [
+    "Caucasian",
+    "[30-40)",
+    2,
+    16,
+    "8",
+    "Up",
+    "NO"
+   ],
+   [
+    "Caucasian",
+    "[40-50)",
+    1,
+    8,
+    "197",
+    "Steady",
+    "NO"
+   ]
+  ]
+ },
+ "sample_after": {
+  "columns": [
+   "num__time_in_hospital",
+   "num__num_lab_procedures",
+   "num__num_procedures",
+   "num__num_medications",
+   "num__number_outpatient",
+   "num__number_emergency",
+   "num__number_inpatient",
+   "num__number_diagnoses",
+   "num__age_num",
+   "race = AfricanAmerican"
+  ],
+  "rows": [
+   [
+    1.61,
+    -0.043,
+    -0.811,
+    0.882,
+    -0.267,
+    -0.216,
+    -0.292,
+    0.886,
+    0.6,
+    0.0
+   ],
+   [
+    -0.094,
+    -0.546,
+    -0.242,
+    -0.083,
+    -0.267,
+    -0.216,
+    -0.292,
+    0.886,
+    0.6,
+    0.0
+   ],
+   [
+    0.247,
+    -0.697,
+    -0.811,
+    0.761,
+    0.696,
+    -0.216,
+    3.044,
+    0.886,
+    -0.025,
+    1.0
+   ],
+   [
+    0.247,
+    -0.143,
+    -0.811,
+    0.761,
+    -0.267,
+    -0.216,
+    -0.292,
+    -1.113,
+    1.849,
+    0.0
+   ],
+   [
+    -0.435,
+    -0.496,
+    -0.811,
+    -0.324,
+    0.696,
+    -0.216,
+    -0.292,
+    -1.113,
+    0.6,
+    0.0
+   ]
+  ]
+ }
+}

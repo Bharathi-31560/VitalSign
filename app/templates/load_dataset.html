@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dataset{% endblock %}
+{% block subtitle %}Inspect the raw data exactly as loaded from <code>data/{{ s.name }}</code>{% endblock %}
+{% block content %}
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="stat c-blue"><div class="stat-label">Dataset file</div><div class="stat-value" style="font-size:1.2rem">{{ s.name }}</div><div class="stat-sub">{{ s.size_mb }} MB</div></div>
+  <div class="stat c-teal"><div class="stat-label">Rows</div><div class="stat-value">{{ s.rows|num }}</div></div>
+  <div class="stat c-violet"><div class="stat-label">Columns</div><div class="stat-value">{{ s.columns }}</div></div>
+  <div class="stat c-red"><div class="stat-label">Duplicate rows</div><div class="stat-value">{{ s.duplicate_rows|num }}</div><div class="stat-sub">{{ s.duplicate_patients|num }} repeat encounters of the same patient</div></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h2>Records</h2>
+    <div class="tabs" style="margin:0">
+      <a class="tab {{ 'active' if view=='all' }}" href="{{ url_for('dataset', view='all') }}">Browse all</a>
+      <a class="tab {{ 'active' if view=='head' }}" href="{{ url_for('dataset', view='head') }}">First rows</a>
+      <a class="tab {{ 'active' if view=='tail' }}" href="{{ url_for('dataset', view='tail') }}">Last rows</a>
+    </div></div>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th class="num">#</th>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in rows %}<tr><td class="num muted">{{ start + loop.index }}</td>{% for v in row %}<td>{{ v if v != '' else '-' }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+  </table></div>
+  {% if view == 'all' %}
+  <div class="pager">
+    {% if page > 1 %}<a href="{{ url_for('dataset', view='all', page=1) }}">&laquo; First</a><a href="{{ url_for('dataset', view='all', page=page-1) }}">&lsaquo; Prev</a>{% else %}<span class="off">&laquo; First</span><span class="off">&lsaquo; Prev</span>{% endif %}
+    <span class="current">Page {{ page|num }} of {{ pages|num }}</span>
+    {% if page < pages %}<a href="{{ url_for('dataset', view='all', page=page+1) }}">Next &rsaquo;</a><a href="{{ url_for('dataset', view='all', page=pages) }}">Last &raquo;</a>{% else %}<span class="off">Next &rsaquo;</span><span class="off">Last &raquo;</span>{% endif %}
+    <form method="get" style="display:flex;gap:6px;margin-left:auto"><input type="hidden" name="view" value="all"><input type="number" name="page" min="1" max="{{ pages }}" placeholder="Go to page" style="width:130px"><button class="btn btn-sm" type="submit">Go</button></form>
+  </div>
+  {% endif %}
+  <p class="chart-caption">Only {{ rows|length }} rows are sent to the browser at a time. Missing values ("?" in the file) are shown as "-".</p>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h2>Column names &amp; data types</h2>
+    <div class="table-wrap scroll-y"><table class="data">
+      <thead><tr><th>Column</th><th>Type</th><th class="num">Unique</th><th class="num">Missing</th><th>Example</th></tr></thead>
+      <tbody>{% for c in s.column_table %}<tr><td><b>{{ c.name }}</b></td><td><span class="badge {{ 'badge-blue' if c.dtype != 'text' else 'badge-amber' }}">{{ c.dtype }}</span></td><td class="num">{{ c.unique|num }}</td><td class="num">{{ c.missing|num }}</td><td>{{ c.example }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </div>
+  <div>
+    <div class="card">
+      <h2>Missing value summary</h2>
+      {% if s.missing_cols %}
+      <div class="table-wrap"><table class="data"><thead><tr><th>Column</th><th class="num">Missing</th><th class="num">%</th><th style="width:35%"></th></tr></thead><tbody>
+      {% for c in s.column_table if c.missing %}<tr><td><b>{{ c.name }}</b></td><td class="num">{{ c.missing|num }}</td><td class="num">{{ c.missing_pct }}%</td><td><div class="bar"><i style="width:{{ c.missing_pct }}%"></i></div></td></tr>{% endfor %}
+      </tbody></table></div>
+      {% else %}<div class="alert alert-ok mb0">No missing values.</div>{% endif %}
+      <p class="chart-caption">Total missing cells: <b>{{ s.missing_cells|num }}</b>. The strings "None" in <code>max_glu_serum</code> and <code>A1Cresult</code> are real values (test not performed), not missing data.</p>
+    </div>
+    <div class="card">
+      <h2>Column roles</h2>
+      <p><b>Target:</b> <code>{{ s.target }}</code> ({{ s.target_counts.items()|map('join', ': ')|join(', ') }})</p>
+      <p><b>Identifiers (not used as features):</b> {% for c in s.ids %}<code>{{ c }}</code> {% endfor %}</p>
+      <p><b>Numerical:</b> {% for c in s.numeric %}<span class="badge badge-blue">{{ c }}</span> {% endfor %}</p>
+      <p class="mb0"><b>Categorical ({{ s.categorical|length }}):</b> {% for c in s.categorical %}<span class="badge">{{ c }}</span> {% endfor %}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

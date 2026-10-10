@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}{{ info.name }}{% endblock %}
+{% block subtitle %}{{ info.type }}{% endblock %}
+{% block content %}
+<div class="tabs"><a class="tab" href="{{ url_for('models') }}">&larr; All models</a>
+  {% if prev %}<a class="tab" href="{{ url_for('model_detail', slug=prev.slug) }}">&lsaquo; {{ prev.name }}</a>{% endif %}
+  {% if nxt %}<a class="tab" href="{{ url_for('model_detail', slug=nxt.slug) }}">{{ nxt.name }} &rsaquo;</a>{% endif %}</div>
+
+{% if error %}<div class="alert alert-error">This model could not be trained: {{ error }}</div>{% endif %}
+
+<div class="grid grid-2">
+  <div class="card"><h2>Model name</h2><p style="font-size:1.25rem;font-weight:700;margin-bottom:6px">{{ info.name }}
+    {% if info.slug == best %}<span class="badge badge-teal">Best model</span>{% endif %}</p>
+    <p><span class="badge {{ 'badge-blue' if info.family == 'supervised' else 'badge-violet' }}">{{ info.type }}</span></p>
+    <p class="muted mb0">{{ info.summary }}</p></div>
+  <div class="card"><h2>Strengths &amp; limitations</h2>
+    <div class="grid grid-2" style="gap:14px"><div><b class="small">Strengths</b><ul class="list-clean small">{% for s in info.strengths %}<li>{{ s }}</li>{% endfor %}</ul></div>
+    <div><b class="small">Limitations</b><ul class="list-clean small">{% for s in info.limits %}<li>{{ s }}</li>{% endfor %}</ul></div></div></div>
+</div>
+
+<div class="grid grid-2">
+  <div class="card"><h2>How it works</h2>{% for t in info.how %}<p>{{ t }}</p>{% endfor %}</div>
+  <div class="card"><h2>Why it is useful for Vital Sign</h2>{% for t in info.why %}<p>{{ t }}</p>{% endfor %}</div>
+</div>
+
+{% if r %}
+<div class="card"><h2>Training</h2>
+  <div class="grid grid-4">
+    {% if r.kind == 'supervised' %}
+    <div class="metric"><div class="v">{{ r.n_train_used|num }}</div><div class="l">Training rows used{% if r.n_train_used < r.n_train_total %} (of {{ r.n_train_total|num }}){% endif %}</div></div>
+    <div class="metric"><div class="v">{{ r.n_features }}</div><div class="l">Input features</div></div>
+    <div class="metric"><div class="v">{{ r.train_time_sec }}s</div><div class="l">Training time</div></div>
+    <div class="metric"><div class="v">{{ r.train_accuracy|score }}</div><div class="l">Train accuracy (first 10k rows)</div></div>
+    {% else %}
+    <div class="metric"><div class="v">{{ r.n_samples|num }}</div><div class="l">Patients clustered</div></div>
+    <div class="metric"><div class="v">{{ r.params|length }}</div><div class="l">Settings</div></div>
+    {% endif %}
+  </div>
+  {% if r.params %}<p class="chart-caption" style="margin-top:14px"><b>Settings:</b> {% for k, v in r.params.items() %}<code>{{ k }} = {{ v }}</code> {% endfor %}</p>{% endif %}
+  {% if r.kind == 'supervised' %}<p class="chart-caption">Preprocessing was fitted on the training set only; the model was evaluated on {{ r.n_test|num }} unseen test patients.</p>{% endif %}
+</div>
+
+<h2 style="margin:6px 0 14px">Results</h2>
+{% if r.kind == 'supervised' %}
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="metric"><div class="v">{{ r.accuracy|score }}</div><div class="l">Accuracy</div></div>
+  <div class="metric"><div class="v">{{ r.precision|score }}</div><div class="l">Precision</div></div>
+  <div class="metric"><div class="v">{{ r.recall|score }}</div><div class="l">Recall</div></div>
+  <div class="metric"><div class="v">{{ r.f1|score }}</div><div class="l">F1-score</div></div>
+</div>
+<div class="grid grid-3">
+  <div class="card chart"><h3>Confusion matrix</h3><img src="{{ url_for('static', filename='charts/confusion_matrix_' ~ info.slug ~ '.png') }}" alt="Confusion matrix"></div>
+  <div class="card chart"><h3>ROC curve (AUC {{ r.roc_auc|score }})</h3><img src="{{ url_for('static', filename='charts/roc_' ~ info.slug ~ '.png') }}" alt="ROC curve"></div>
+  {% if r.importances %}<div class="card chart"><h3>{{ 'Coefficients' if r.importance_kind == 'coef' else 'Top feature importances' }}</h3><img src="{{ url_for('static', filename='charts/importance_' ~ info.slug ~ '.png') }}" alt="Importances"></div>{% endif %}
+</div>
+{% elif info.slug == 'kmeans' %}
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="metric"><div class="v">{{ r.k }}</div><div class="l">Clusters (k)</div></div>
+  <div class="metric"><div class="v">{{ '{:,.0f}'.format(r.inertia) }}</div><div class="l">Inertia</div></div>
+  <div class="metric"><div class="v">{{ r.silhouette|score }}</div><div class="l">Silhouette</div></div>
+  <div class="metric"><div class="v">{{ r.davies_bouldin|score }}</div><div class="l">Davies-Bouldin (lower = better)</div></div>
+</div>
+<div class="card chart"><h3>Elbow method</h3><img src="{{ url_for('static', filename='charts/kmeans_elbow.png') }}" alt="Elbow">
+  <p class="chart-caption">k was chosen as the point farthest from the straight line joining the first and last inertia values (the "elbow"): k = {{ r.elbow.chosen_k }}. Inertia always decreases as k grows; silhouette is shown as a second opinion. The curve bends only gently, so the data has no sharply separated groups - treat the clusters as patient <i>segments</i>, not natural classes.</p>
+  <div class="table-wrap"><table class="data"><thead><tr><th>k</th>{% for k in r.elbow.k_values %}<th class="num">{{ k }}</th>{% endfor %}</tr></thead><tbody>
+  <tr><td>Inertia</td>{% for v in r.elbow.inertia %}<td class="num">{{ '{:,.0f}'.format(v) }}</td>{% endfor %}</tr>
+  <tr><td>Silhouette</td>{% for v in r.elbow.silhouette %}<td class="num">{{ v|score }}</td>{% endfor %}</tr></tbody></table></div></div>
+<div class="grid grid-2">
+  <div class="card chart"><h3>Clusters (PCA projection)</h3><img src="{{ url_for('static', filename='charts/cluster_plot.png') }}" alt="Clusters">
+    <p class="chart-caption">The 9 scaled numeric features are projected onto 2 principal components ({{ (r.pca_variance[0] * 100)|round|int }}% + {{ (r.pca_variance[1] * 100)|round|int }}% of the variance) for display only.</p></div>
+  <div class="card"><h3>Cluster profiles</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Cluster</th><th class="num">Patients</th><th class="num">% readmitted</th>{% for c in r.profile_columns %}<th class="num">avg {{ c }}</th>{% endfor %}</tr></thead><tbody>
+    {% for c in r.clusters %}<tr><td><b>{{ c.cluster }}</b></td><td class="num">{{ c.size|num }} ({{ c.pct }}%)</td><td class="num"><span class="badge {{ 'badge-red' if c.readmit_rate > r.overall_readmit_rate + 5 else 'badge-teal' if c.readmit_rate < r.overall_readmit_rate - 5 else '' }}">{{ c.readmit_rate }}%</span></td>{% for col in r.profile_columns %}<td class="num">{{ c.means[col] }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
+    <p class="chart-caption">Overall readmission rate in the training data: <b>{{ r.overall_readmit_rate }}%</b>. The outcome was NOT used for clustering - differences between clusters were discovered purely from the clinical numbers.</p></div>
+</div>
+{% else %}
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="metric"><div class="v">{{ '%.2f'|format(r.eps) }}</div><div class="l">eps (radius)</div></div>
+  <div class="metric"><div class="v">{{ r.min_samples }}</div><div class="l">min_samples</div></div>
+  <div class="metric"><div class="v">{{ r.n_clusters }}</div><div class="l">Clusters found</div></div>
+  <div class="metric"><div class="v">{{ r.n_noise|num }}</div><div class="l">Noise points ({{ r.noise_pct }}%)</div></div>
+</div>
+<div class="grid grid-2">
+  <div class="card chart"><h3>Choosing eps: k-distance plot</h3><img src="{{ url_for('static', filename='charts/dbscan_kdistance.png') }}" alt="k-distance">
+    <p class="chart-caption"><b>eps</b> = neighbourhood radius ({{ '%.2f'|format(r.eps) }}); <b>min_samples</b> = patients needed inside that radius ({{ r.min_samples }} = 2 x number of features). eps was taken at the knee of the sorted distance curve, where distances start to rise sharply.</p></div>
+  <div class="card chart"><h3>Clustering result</h3><img src="{{ url_for('static', filename='charts/dbscan_clusters.png') }}" alt="DBSCAN">
+    <p class="chart-caption">Run on a random sample of {{ r.n_samples|num }} training patients. Grey points are <b>noise</b>: patients with fewer than {{ r.min_samples }} neighbours within eps, i.e. atypical combinations of stay length, medications and prior visits.</p></div>
+</div>
+<div class="card"><h3>Groups found</h3>
+  <div class="table-wrap"><table class="data"><thead><tr><th>Group</th><th class="num">Patients</th><th class="num">Share</th><th class="num">% readmitted</th></tr></thead><tbody>
+  {% for g in r.groups %}<tr><td><b>{{ g.label }}</b></td><td class="num">{{ g.size|num }}</td><td class="num">{{ g.pct }}%</td><td class="num">{{ g.readmit_rate if g.readmit_rate is not none else '-' }}%</td></tr>{% endfor %}</tbody></table></div>
+  <p class="chart-caption">Sample readmission rate: {{ r.overall_readmit_rate }}%. {% if r.n_clusters <= 1 %}Most patients form <b>one</b> dense region - the clinical numbers vary continuously and do not split into separated groups - so DBSCAN mainly acts as an outlier detector here. {% endif %}Noise points are the unusual encounters worth a closer clinical look.</p></div>
+{% endif %}
+{% elif not error %}
+<div class="alert alert-warn">No results are available for this model.</div>
+{% endif %}
+{% endblock %}

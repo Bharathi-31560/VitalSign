@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Models{% endblock %}
+{% block subtitle %}Supervised classifiers and unsupervised clustering trained on the Vital Sign data{% endblock %}
+{% block content %}
+{% for family, title in [('supervised', 'Supervised classification - predict readmission'), ('unsupervised', 'Unsupervised learning - discover patient groups')] %}
+<div class="section-title">{{ title }}</div>
+<div class="grid grid-3" style="margin-bottom:10px">
+  {% for c in cards if c.family == family %}
+  <div class="model-card">
+    {% if c.slug == best %}<span class="badge badge-teal ribbon">Best model</span>{% endif %}
+    <div class="model-meta"><span class="badge {{ 'badge-blue' if family == 'supervised' else 'badge-violet' }}">{{ c.type }}</span></div>
+    <h3>{{ c.name }}</h3>
+    <p class="small muted">{{ c.summary }}</p>
+    <div class="use"><b>Use in Vital Sign:</b> {{ c.vital_use }}</div>
+    {% if c.result and family == 'supervised' %}<p class="small"><b>ROC-AUC {{ c.result.roc_auc|score }}</b> &middot; Accuracy {{ c.result.accuracy|score }}</p>
+    {% elif c.result and c.slug == 'kmeans' %}<p class="small"><b>k = {{ c.result.k }}</b> &middot; silhouette {{ c.result.silhouette|score }}</p>
+    {% elif c.result %}<p class="small"><b>{{ c.result.n_clusters }} cluster(s)</b> &middot; {{ c.result.n_noise|num }} noise points</p>{% endif %}
+    <a class="btn" href="{{ url_for('model_detail', slug=c.slug) }}">View Model</a>
+  </div>
+  {% endfor %}
+</div>
+{% endfor %}
+{% endblock %}

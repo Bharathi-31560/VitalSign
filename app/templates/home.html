@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block subtitle %}Overview of the patient dataset and model performance{% endblock %}
+{% block content %}
+{% if not pipeline_ready %}
+<div class="alert alert-warn banner">
+  <span><b>Models and charts have not been generated yet.</b> Run the pipeline to unlock EDA, models, evaluation and prediction.</span>
+  <button class="btn btn-sm" data-run-pipeline>Run analysis &amp; train models</button>
+</div>
+<div id="pipe-status" class="alert alert-info" style="display:none"><span class="msg"></span><div class="progress"><div></div></div></div>
+{% endif %}
+
+<div class="grid grid-7" style="margin-bottom:22px">
+  <div class="stat c-blue"><div class="stat-label">Total records</div><div class="stat-value">{{ s.rows|num }}</div><div class="stat-sub">{{ s.name }}</div></div>
+  <div class="stat c-teal"><div class="stat-label">Features</div><div class="stat-value">{{ s.n_features }}</div><div class="stat-sub">{{ s.columns }} columns incl. id &amp; target</div></div>
+  <div class="stat c-violet"><div class="stat-label">Numerical features</div><div class="stat-value">{{ s.numeric|length }}</div><div class="stat-sub">counts &amp; measurements</div></div>
+  <div class="stat c-amber"><div class="stat-label">Categorical features</div><div class="stat-value">{{ s.categorical|length }}</div><div class="stat-sub">incl. category codes</div></div>
+  <div class="stat c-red"><div class="stat-label">Missing values</div><div class="stat-value">{{ s.missing_cells|num }}</div><div class="stat-sub">in {{ s.missing_cols|length }} columns</div></div>
+  <div class="stat c-blue"><div class="stat-label">Duplicate rows</div><div class="stat-value">{{ s.duplicate_rows|num }}</div><div class="stat-sub">{{ s.duplicate_patients|num }} repeat patient encounters</div></div>
+  <div class="stat c-teal"><div class="stat-label">Target classes</div><div class="stat-value">{{ s.n_target_classes }}</div><div class="stat-sub">{{ s.target }}: {{ s.target_counts.keys()|join(' / ') }}</div></div>
+</div>
+
+<div class="alert alert-info"><b>About the data &amp; target.</b> Each row is a hospital encounter of a diabetic patient (demographics, stay length, procedures, medications, diagnoses, lab tests). The model predicts whether the patient is <b>readmitted</b> to hospital (<code>&gt;30</code> or <code>&lt;30</code> days = Readmitted, <code>NO</code> = Not readmitted).</div>
+
+{% if eda %}
+<div class="grid grid-2">
+  <div class="card chart"><h3>Target / class distribution</h3><img src="{{ url_for('static', filename='charts/target_distribution.png') }}" alt="Target distribution"></div>
+  <div class="card chart"><h3>Age and readmission</h3><img src="{{ url_for('static', filename='charts/age_readmission.png') }}" alt="Age vs readmission"></div>
+</div>
+{% endif %}
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Key feature statistics (raw data)</h3>
+    <div class="table-wrap scroll-y"><table class="data">
+      <thead><tr><th>Feature</th><th class="num">Mean</th><th class="num">Median</th><th class="num">Std</th><th class="num">Min</th><th class="num">Max</th></tr></thead>
+      <tbody>{% for r in num_stats %}<tr><td>{{ r['index'] }}</td><td class="num">{{ r['mean'] }}</td><td class="num">{{ r['median'] }}</td><td class="num">{{ r['std'] }}</td><td class="num">{{ r['min']|int }}</td><td class="num">{{ r['max']|int }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3>Model performance summary</h3>{% if models %}<a class="btn btn-outline btn-sm" href="{{ url_for('comparison') }}">Full comparison</a>{% endif %}</div>
+    {% if models %}
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Model</th><th class="num">Accuracy</th><th class="num">F1</th><th class="num">ROC-AUC</th></tr></thead>
+      <tbody>{% for m in models %}<tr class="{{ 'best' if m.slug == res.best_model else '' }}"><td>{{ m.name }}{% if m.slug == res.best_model %} <span class="badge badge-teal">Best</span>{% endif %}</td><td class="num">{{ m.accuracy|score }}</td><td class="num">{{ m.f1|score }}</td><td class="num">{{ m.roc_auc|score }}</td></tr>{% endfor %}</tbody>
+    </table></div>
+    <p class="chart-caption">Evaluated on a held-out test set. Best model chosen by {{ res.best_criterion }}.</p>
+    {% else %}<p class="muted">Train the models to see their performance here.</p>{% endif %}
+  </div>
+</div>
+
+{% if eda %}
+<div class="grid grid-2">
+  <div class="card chart"><h3>Correlation overview</h3><img src="{{ url_for('static', filename='charts/correlation_matrix.png') }}" alt="Correlation matrix"></div>
+  <div class="card chart"><h3>Vital-sign style distributions</h3><img src="{{ url_for('static', filename='charts/distribution_plots.png') }}" alt="Distributions">
+    <p class="chart-caption">Overall readmission rate in the cleaned data: <b>{{ eda.readmit_rate }}%</b> of {{ eda.rows|num }} patients. Strongest numeric correlate: <b>{{ eda.target_corr[0].feature }}</b> (r = {{ eda.target_corr[0].r }}).</p></div>
+</div>
+{% endif %}
+{% endblock %}

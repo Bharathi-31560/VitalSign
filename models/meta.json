@@ -1,0 +1,1600 @@
+{
+ "target": "readmitted_any",
+ "target_labels": {
+  "0": "Not readmitted",
+  "1": "Readmitted"
+ },
+ "features": [
+  "race",
+  "gender",
+  "admission_type_id",
+  "discharge_disposition_id",
+  "admission_source_id",
+  "time_in_hospital",
+  "payer_code",
+  "medical_specialty",
+  "num_lab_procedures",
+  "num_procedures",
+  "num_medications",
+  "number_outpatient",
+  "number_emergency",
+  "number_inpatient",
+  "diag_1",
+  "diag_2",
+  "diag_3",
+  "number_diagnoses",
+  "max_glu_serum",
+  "A1Cresult",
+  "metformin",
+  "repaglinide",
+  "nateglinide",
+  "chlorpropamide",
+  "glimepiride",
+  "acetohexamide",
+  "glipizide",
+  "glyburide",
+  "tolbutamide",
+  "pioglitazone",
+  "rosiglitazone",
+  "acarbose",
+  "miglitol",
+  "troglitazone",
+  "tolazamide",
+  "insulin",
+  "glyburide-metformin",
+  "glipizide-metformin",
+  "metformin-rosiglitazone",
+  "metformin-pioglitazone",
+  "change",
+  "diabetesMed",
+  "age_num"
+ ],
+ "numeric_features": [
+  "time_in_hospital",
+  "num_lab_procedures",
+  "num_procedures",
+  "num_medications",
+  "number_outpatient",
+  "number_emergency",
+  "number_inpatient",
+  "number_diagnoses",
+  "age_num"
+ ],
+ "categorical_features": [
+  "race",
+  "gender",
+  "admission_type_id",
+  "discharge_disposition_id",
+  "admission_source_id",
+  "payer_code",
+  "medical_specialty",
+  "diag_1",
+  "diag_2",
+  "diag_3",
+  "max_glu_serum",
+  "A1Cresult",
+  "metformin",
+  "repaglinide",
+  "nateglinide",
+  "chlorpropamide",
+  "glimepiride",
+  "acetohexamide",
+  "glipizide",
+  "glyburide",
+  "tolbutamide",
+  "pioglitazone",
+  "rosiglitazone",
+  "acarbose",
+  "miglitol",
+  "troglitazone",
+  "tolazamide",
+  "insulin",
+  "glyburide-metformin",
+  "glipizide-metformin",
+  "metformin-rosiglitazone",
+  "metformin-pioglitazone",
+  "change",
+  "diabetesMed"
+ ],
+ "form_fields": [
+  {
+   "name": "race",
+   "label": "Race",
+   "group": "Patient",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "Caucasian",
+   "options": [
+    {
+     "value": "Caucasian",
+     "label": "Caucasian"
+    },
+    {
+     "value": "AfricanAmerican",
+     "label": "AfricanAmerican"
+    },
+    {
+     "value": "Unknown",
+     "label": "Unknown"
+    },
+    {
+     "value": "Hispanic",
+     "label": "Hispanic"
+    },
+    {
+     "value": "Other",
+     "label": "Other"
+    },
+    {
+     "value": "Asian",
+     "label": "Asian"
+    }
+   ]
+  },
+  {
+   "name": "gender",
+   "label": "Gender",
+   "group": "Patient",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "Female",
+   "options": [
+    {
+     "value": "Female",
+     "label": "Female"
+    },
+    {
+     "value": "Male",
+     "label": "Male"
+    }
+   ]
+  },
+  {
+   "name": "admission_type_id",
+   "label": "Admission type",
+   "group": "Admission",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "1",
+   "options": [
+    {
+     "value": "1",
+     "label": "1 - Emergency"
+    },
+    {
+     "value": "3",
+     "label": "3 - Elective"
+    },
+    {
+     "value": "2",
+     "label": "2 - Urgent"
+    },
+    {
+     "value": "6",
+     "label": "6 - Unknown"
+    },
+    {
+     "value": "5",
+     "label": "5 - Not available"
+    },
+    {
+     "value": "8",
+     "label": "8 - Not mapped"
+    },
+    {
+     "value": "7",
+     "label": "7 - Trauma centre"
+    },
+    {
+     "value": "4",
+     "label": "4 - Newborn"
+    }
+   ]
+  },
+  {
+   "name": "discharge_disposition_id",
+   "label": "Discharge disposition",
+   "group": "Admission",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "1",
+   "options": [
+    {
+     "value": "1",
+     "label": "1 - Discharged to home"
+    },
+    {
+     "value": "3",
+     "label": "3 - Skilled nursing facility"
+    },
+    {
+     "value": "6",
+     "label": "6 - Home with home health service"
+    },
+    {
+     "value": "18",
+     "label": "18 - Unknown"
+    },
+    {
+     "value": "2",
+     "label": "2 - Short-term hospital"
+    },
+    {
+     "value": "22",
+     "label": "22 - Rehab facility"
+    },
+    {
+     "value": "5",
+     "label": "5 - Other inpatient institution"
+    },
+    {
+     "value": "25",
+     "label": "25 - Not mapped"
+    },
+    {
+     "value": "4",
+     "label": "4 - Intermediate care facility"
+    },
+    {
+     "value": "7",
+     "label": "7 - Left against medical advice"
+    },
+    {
+     "value": "23",
+     "label": "23 - Long-term care hospital"
+    },
+    {
+     "value": "28",
+     "label": "28 - Psychiatric hospital"
+    },
+    {
+     "value": "8",
+     "label": "8 - Home with IV services"
+    },
+    {
+     "value": "15",
+     "label": "15 - Swing bed"
+    },
+    {
+     "value": "24",
+     "label": "24 - Nursing facility (Medicaid)"
+    },
+    {
+     "value": "9",
+     "label": "9 - Admitted as inpatient here"
+    },
+    {
+     "value": "17",
+     "label": "17 - Outpatient - this institution"
+    },
+    {
+     "value": "10",
+     "label": "10 - Neonate to another hospital"
+    },
+    {
+     "value": "27",
+     "label": "27 - Federal health facility"
+    },
+    {
+     "value": "12",
+     "label": "12 - Still a patient / outpatient"
+    },
+    {
+     "value": "16",
+     "label": "16 - Outpatient - other institution"
+    }
+   ]
+  },
+  {
+   "name": "admission_source_id",
+   "label": "Admission source",
+   "group": "Admission",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "7",
+   "options": [
+    {
+     "value": "7",
+     "label": "7 - Emergency room"
+    },
+    {
+     "value": "1",
+     "label": "1 - Physician referral"
+    },
+    {
+     "value": "17",
+     "label": "17 - Unknown"
+    },
+    {
+     "value": "4",
+     "label": "4 - Transfer from hospital"
+    },
+    {
+     "value": "6",
+     "label": "6 - Transfer from other facility"
+    },
+    {
+     "value": "2",
+     "label": "2 - Clinic referral"
+    },
+    {
+     "value": "5",
+     "label": "5 - Transfer from skilled nursing facility"
+    },
+    {
+     "value": "20",
+     "label": "20 - Not mapped"
+    },
+    {
+     "value": "3",
+     "label": "3 - HMO referral"
+    },
+    {
+     "value": "9",
+     "label": "9 - Not available"
+    },
+    {
+     "value": "8",
+     "label": "8 - Court / law enforcement"
+    },
+    {
+     "value": "10",
+     "label": "10 - Transfer from critical access hospital"
+    },
+    {
+     "value": "22",
+     "label": "22 - Transfer within hospital"
+    },
+    {
+     "value": "14",
+     "label": "14 - Extramural birth"
+    },
+    {
+     "value": "11",
+     "label": "11 - Normal delivery"
+    },
+    {
+     "value": "13",
+     "label": "13 - Sick baby"
+    }
+   ]
+  },
+  {
+   "name": "time_in_hospital",
+   "label": "Days in hospital",
+   "group": "Admission",
+   "open": true,
+   "kind": "number",
+   "min": 1.0,
+   "max": 14.0,
+   "default": 3
+  },
+  {
+   "name": "payer_code",
+   "label": "Payer code",
+   "group": "Admission",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "Unknown",
+   "options": [
+    {
+     "value": "Unknown",
+     "label": "Unknown"
+    },
+    {
+     "value": "MC",
+     "label": "MC"
+    },
+    {
+     "value": "HM",
+     "label": "HM"
+    },
+    {
+     "value": "BC",
+     "label": "BC"
+    },
+    {
+     "value": "SP",
+     "label": "SP"
+    },
+    {
+     "value": "MD",
+     "label": "MD"
+    },
+    {
+     "value": "CP",
+     "label": "CP"
+    },
+    {
+     "value": "UN",
+     "label": "UN"
+    },
+    {
+     "value": "CM",
+     "label": "CM"
+    },
+    {
+     "value": "OG",
+     "label": "OG"
+    },
+    {
+     "value": "PO",
+     "label": "PO"
+    },
+    {
+     "value": "DM",
+     "label": "DM"
+    },
+    {
+     "value": "WC",
+     "label": "WC"
+    },
+    {
+     "value": "CH",
+     "label": "CH"
+    },
+    {
+     "value": "OT",
+     "label": "OT"
+    },
+    {
+     "value": "SI",
+     "label": "SI"
+    },
+    {
+     "value": "MP",
+     "label": "MP"
+    }
+   ]
+  },
+  {
+   "name": "medical_specialty",
+   "label": "Medical specialty",
+   "group": "Admission",
+   "open": true,
+   "kind": "select",
+   "numeric": false,
+   "default": "Unknown",
+   "options": [
+    {
+     "value": "Unknown",
+     "label": "Unknown"
+    },
+    {
+     "value": "InternalMedicine",
+     "label": "InternalMedicine"
+    },
+    {
+     "value": "Family/GeneralPractice",
+     "label": "Family/GeneralPractice"
+    },
+    {
+     "value": "Emergency/Trauma",
+     "label": "Emergency/Trauma"
+    },
+    {
+     "value": "Cardiology",
+     "label": "Cardiology"
+    },
+    {
+     "value": "Surgery-General",
+     "label": "Surgery-General"
+    },
+    {
+     "value": "Orthopedics",
+     "label": "Orthopedics"
+    },
+    {
+     "value": "Orthopedics-Reconstructive",
+     "label": "Orthopedics-Reconstructive"
+    },
+    {
+     "value": "Radiologist",
+     "label": "Radiologist"
+    },
+    {
+     "value": "Nephrology",
+     "label": "Nephrology"
+    },
+    {
+     "value": "Psychiatry",
+     "label": "Psychiatry"
+    },
+    {
+     "value": "Pulmonology",
+     "label": "Pulmonology"
+    },
+    {
+     "value": "ObstetricsandGynecology",
+     "label": "ObstetricsandGynecology"
+    },
+    {
+     "value": "Urology",
+     "label": "Urology"
+    },
+    {
+     "value": "Surgery-Cardiovascular/Thoracic",
+     "label": "Surgery-Cardiovascular/Thoracic"
+    },
+    {
+     "value": "Surgery-Neuro",
+     "label": "Surgery-Neuro"
+    },
+    {
+     "value": "Gastroenterology",
+     "label": "Gastroenterology"
+    },
+    {
+     "value": "Surgery-Vascular",
+     "label": "Surgery-Vascular"
+    },
+    {
+     "value": "Pediatrics",
+     "label": "Pediatrics"
+    },
+    {
+     "value": "Oncology",
+     "label": "Oncology"
+    },
+    {
+     "value": "PhysicalMedicineandRehabilitation",
+     "label": "PhysicalMedicineandRehabilitation"
+    },
+    {
+     "value": "Neurology",
+     "label": "Neurology"
+    },
+    {
+     "value": "Pediatrics-Endocrinology",
+     "label": "Pediatrics-Endocrinology"
+    },
+    {
+     "value": "Otolaryngology",
+     "label": "Otolaryngology"
+    },
+    {
+     "value": "Hematology/Oncology",
+     "label": "Hematology/Oncology"
+    },
+    {
+     "value": "Endocrinology",
+     "label": "Endocrinology"
+    },
+    {
+     "value": "Surgery-Thoracic",
+     "label": "Surgery-Thoracic"
+    },
+    {
+     "value": "Surgery-Cardiovascular",
+     "label": "Surgery-Cardiovascular"
+    },
+    {
+     "value": "Pediatrics-CriticalCare",
+     "label": "Pediatrics-CriticalCare"
+    },
+    {
+     "value": "Podiatry",
+     "label": "Podiatry"
+    },
+    {
+     "value": "Gynecology",
+     "label": "Gynecology"
+    },
+    {
+     "value": "Psychology",
+     "label": "Psychology"
+    },
+    {
+     "value": "Radiology",
+     "label": "Radiology"
+    },
+    {
+     "value": "Surgeon",
+     "label": "Surgeon"
+    },
+    {
+     "value": "Osteopath",
+     "label": "Osteopath"
+    },
+    {
+     "value": "Ophthalmology",
+     "label": "Ophthalmology"
+    },
+    {
+     "value": "Hospitalist",
+     "label": "Hospitalist"
+    },
+    {
+     "value": "Hematology",
+     "label": "Hematology"
+    },
+    {
+     "value": "Surgery-Plastic",
+     "label": "Surgery-Plastic"
+    },
+    {
+     "value": "InfectiousDiseases",
+     "label": "InfectiousDiseases"
+    },
+    {
+     "value": "SurgicalSpecialty",
+     "label": "SurgicalSpecialty"
+    },
+    {
+     "value": "Obstetrics",
+     "label": "Obstetrics"
+    },
+    {
+     "value": "Obsterics&Gynecology-GynecologicOnco",
+     "label": "Obsterics&Gynecology-GynecologicOnco"
+    },
+    {
+     "value": "Anesthesiology-Pediatric",
+     "label": "Anesthesiology-Pediatric"
+    },
+    {
+     "value": "Rheumatology",
+     "label": "Rheumatology"
+    },
+    {
+     "value": "OutreachServices",
+     "label": "OutreachServices"
+    },
+    {
+     "value": "Surgery-Colon&Rectal",
+     "label": "Surgery-Colon&Rectal"
+    },
+    {
+     "value": "Cardiology-Pediatric",
+     "label": "Cardiology-Pediatric"
+    },
+    {
+     "value": "Surgery-Maxillofacial",
+     "label": "Surgery-Maxillofacial"
+    },
+    {
+     "value": "Pediatrics-Pulmonology",
+     "label": "Pediatrics-Pulmonology"
+    },
+    {
+     "value": "Pathology",
+     "label": "Pathology"
+    },
+    {
+     "value": "Pediatrics-Neurology",
+     "label": "Pediatrics-Neurology"
+    },
+    {
+     "value": "Anesthesiology",
+     "label": "Anesthesiology"
+    },
+    {
+     "value": "Endocrinology-Metabolism",
+     "label": "Endocrinology-Metabolism"
+    },
+    {
+     "value": "PhysicianNotFound",
+     "label": "PhysicianNotFound"
+    },
+    {
+     "value": "AllergyandImmunology",
+     "label": "AllergyandImmunology"
+    },
+    {
+     "value": "Surgery-Pediatric",
+     "label": "Surgery-Pediatric"
+    },
+    {
+     "value": "Psychiatry-Child/Adolescent",
+     "label": "Psychiatry-Child/Adolescent"
+    },
+    {
+     "value": "Dentistry",
+     "label": "Dentistry"
+    },
+    {
+     "value": "Pediatrics-Hematology-Oncology",
+     "label": "Pediatrics-Hematology-Oncology"
+    },
+    {
+     "value": "Pediatrics-EmergencyMedicine",
+     "label": "Pediatrics-EmergencyMedicine"
+    },
+    {
+     "value": "DCPTEAM",
+     "label": "DCPTEAM"
+    },
+    {
+     "value": "Perinatology",
+     "label": "Perinatology"
+    },
+    {
+     "value": "Resident",
+     "label": "Resident"
+    },
+    {
+     "value": "Surgery-PlasticwithinHeadandNeck",
+     "label": "Surgery-PlasticwithinHeadandNeck"
+    },
+    {
+     "value": "Dermatology",
+     "label": "Dermatology"
+    },
+    {
+     "value": "Proctology",
+     "label": "Proctology"
+    },
+    {
+     "value": "Neurophysiology",
+     "label": "Neurophysiology"
+    },
+    {
+     "value": "Speech",
+     "label": "Speech"
+    },
+    {
+     "value": "SportsMedicine",
+     "label": "SportsMedicine"
+    },
+    {
+     "value": "Psychiatry-Addictive",
+     "label": "Psychiatry-Addictive"
+    }
+   ]
+  },
+  {
+   "name": "num_lab_procedures",
+   "label": "Lab procedures",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 1.0,
+   "max": 132.0,
+   "default": 44
+  },
+  {
+   "name": "num_procedures",
+   "label": "Other procedures",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 0.0,
+   "max": 6.0,
+   "default": 1
+  },
+  {
+   "name": "num_medications",
+   "label": "Medications given",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 1.0,
+   "max": 81.0,
+   "default": 14
+  },
+  {
+   "name": "number_outpatient",
+   "label": "Outpatient visits (prior year)",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 0.0,
+   "max": 42.0,
+   "default": 0
+  },
+  {
+   "name": "number_emergency",
+   "label": "Emergency visits (prior year)",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 0.0,
+   "max": 37.0,
+   "default": 0
+  },
+  {
+   "name": "number_inpatient",
+   "label": "Inpatient visits (prior year)",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 0.0,
+   "max": 12.0,
+   "default": 0
+  },
+  {
+   "name": "diag_1",
+   "label": "Primary diagnosis group",
+   "group": "Diagnoses",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "Circulatory",
+   "options": [
+    {
+     "value": "Circulatory",
+     "label": "Circulatory"
+    },
+    {
+     "value": "Other",
+     "label": "Other"
+    },
+    {
+     "value": "Respiratory",
+     "label": "Respiratory"
+    },
+    {
+     "value": "Digestive",
+     "label": "Digestive"
+    },
+    {
+     "value": "Diabetes",
+     "label": "Diabetes"
+    },
+    {
+     "value": "Injury",
+     "label": "Injury"
+    },
+    {
+     "value": "Musculoskeletal",
+     "label": "Musculoskeletal"
+    },
+    {
+     "value": "Genitourinary",
+     "label": "Genitourinary"
+    },
+    {
+     "value": "Neoplasms",
+     "label": "Neoplasms"
+    },
+    {
+     "value": "Unknown",
+     "label": "Unknown"
+    }
+   ]
+  },
+  {
+   "name": "diag_2",
+   "label": "Secondary diagnosis group",
+   "group": "Diagnoses",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "Circulatory",
+   "options": [
+    {
+     "value": "Circulatory",
+     "label": "Circulatory"
+    },
+    {
+     "value": "Other",
+     "label": "Other"
+    },
+    {
+     "value": "Diabetes",
+     "label": "Diabetes"
+    },
+    {
+     "value": "Respiratory",
+     "label": "Respiratory"
+    },
+    {
+     "value": "Genitourinary",
+     "label": "Genitourinary"
+    },
+    {
+     "value": "Digestive",
+     "label": "Digestive"
+    },
+    {
+     "value": "Injury",
+     "label": "Injury"
+    },
+    {
+     "value": "Neoplasms",
+     "label": "Neoplasms"
+    },
+    {
+     "value": "Musculoskeletal",
+     "label": "Musculoskeletal"
+    },
+    {
+     "value": "Unknown",
+     "label": "Unknown"
+    }
+   ]
+  },
+  {
+   "name": "diag_3",
+   "label": "Additional diagnosis group",
+   "group": "Diagnoses",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "Circulatory",
+   "options": [
+    {
+     "value": "Circulatory",
+     "label": "Circulatory"
+    },
+    {
+     "value": "Other",
+     "label": "Other"
+    },
+    {
+     "value": "Diabetes",
+     "label": "Diabetes"
+    },
+    {
+     "value": "Respiratory",
+     "label": "Respiratory"
+    },
+    {
+     "value": "Genitourinary",
+     "label": "Genitourinary"
+    },
+    {
+     "value": "Digestive",
+     "label": "Digestive"
+    },
+    {
+     "value": "Musculoskeletal",
+     "label": "Musculoskeletal"
+    },
+    {
+     "value": "Injury",
+     "label": "Injury"
+    },
+    {
+     "value": "Unknown",
+     "label": "Unknown"
+    },
+    {
+     "value": "Neoplasms",
+     "label": "Neoplasms"
+    }
+   ]
+  },
+  {
+   "name": "number_diagnoses",
+   "label": "Number of diagnoses",
+   "group": "Hospital utilisation",
+   "open": true,
+   "kind": "number",
+   "min": 1.0,
+   "max": 16.0,
+   "default": 8
+  },
+  {
+   "name": "max_glu_serum",
+   "label": "Max glucose serum test",
+   "group": "Lab results",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "None",
+   "options": [
+    {
+     "value": "None",
+     "label": "None"
+    },
+    {
+     "value": "Norm",
+     "label": "Norm"
+    },
+    {
+     "value": ">200",
+     "label": ">200"
+    },
+    {
+     "value": ">300",
+     "label": ">300"
+    }
+   ]
+  },
+  {
+   "name": "A1Cresult",
+   "label": "HbA1c test result",
+   "group": "Lab results",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "None",
+   "options": [
+    {
+     "value": "None",
+     "label": "None"
+    },
+    {
+     "value": ">8",
+     "label": ">8"
+    },
+    {
+     "value": "Norm",
+     "label": "Norm"
+    },
+    {
+     "value": ">7",
+     "label": ">7"
+    }
+   ]
+  },
+  {
+   "name": "metformin",
+   "label": "Metformin",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "repaglinide",
+   "label": "Repaglinide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "nateglinide",
+   "label": "Nateglinide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "chlorpropamide",
+   "label": "Chlorpropamide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "glimepiride",
+   "label": "Glimepiride",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "acetohexamide",
+   "label": "Acetohexamide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "glipizide",
+   "label": "Glipizide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "glyburide",
+   "label": "Glyburide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "tolbutamide",
+   "label": "Tolbutamide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "pioglitazone",
+   "label": "Pioglitazone",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "rosiglitazone",
+   "label": "Rosiglitazone",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "acarbose",
+   "label": "Acarbose",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    }
+   ]
+  },
+  {
+   "name": "miglitol",
+   "label": "Miglitol",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    }
+   ]
+  },
+  {
+   "name": "troglitazone",
+   "label": "Troglitazone",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "tolazamide",
+   "label": "Tolazamide",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "insulin",
+   "label": "Insulin",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    }
+   ]
+  },
+  {
+   "name": "glyburide-metformin",
+   "label": "Glyburide + metformin",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    },
+    {
+     "value": "Up",
+     "label": "Up"
+    },
+    {
+     "value": "Down",
+     "label": "Down"
+    }
+   ]
+  },
+  {
+   "name": "glipizide-metformin",
+   "label": "Glipizide + metformin",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "metformin-rosiglitazone",
+   "label": "Metformin + rosiglitazone",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "metformin-pioglitazone",
+   "label": "Metformin + pioglitazone",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Steady",
+     "label": "Steady"
+    }
+   ]
+  },
+  {
+   "name": "change",
+   "label": "Medication change",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "No",
+   "options": [
+    {
+     "value": "No",
+     "label": "No"
+    },
+    {
+     "value": "Ch",
+     "label": "Ch"
+    }
+   ]
+  },
+  {
+   "name": "diabetesMed",
+   "label": "Diabetes medication prescribed",
+   "group": "Diabetes medications",
+   "open": false,
+   "kind": "select",
+   "numeric": false,
+   "default": "Yes",
+   "options": [
+    {
+     "value": "Yes",
+     "label": "Yes"
+    },
+    {
+     "value": "No",
+     "label": "No"
+    }
+   ]
+  },
+  {
+   "name": "age_num",
+   "label": "Age band",
+   "group": "Patient",
+   "open": true,
+   "kind": "select",
+   "numeric": true,
+   "default": "65",
+   "options": [
+    {
+     "value": "5",
+     "label": "[0-10)"
+    },
+    {
+     "value": "15",
+     "label": "[10-20)"
+    },
+    {
+     "value": "25",
+     "label": "[20-30)"
+    },
+    {
+     "value": "35",
+     "label": "[30-40)"
+    },
+    {
+     "value": "45",
+     "label": "[40-50)"
+    },
+    {
+     "value": "55",
+     "label": "[50-60)"
+    },
+    {
+     "value": "65",
+     "label": "[60-70)"
+    },
+    {
+     "value": "75",
+     "label": "[70-80)"
+    },
+    {
+     "value": "85",
+     "label": "[80-90)"
+    },
+    {
+     "value": "95",
+     "label": "[90-100)"
+    }
+   ]
+  }
+ ],
+ "dataset": "vital_sign.csv",
+ "best_model": "gradient_boost"
+}

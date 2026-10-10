@@ -1,0 +1,515 @@
+{
+ "describe": [
+  {
+   "feature": "time_in_hospital",
+   "count": 69987.0,
+   "mean": 4.27,
+   "std": 2.93,
+   "min": 1.0,
+   "25%": 2.0,
+   "50%": 3.0,
+   "75%": 6.0,
+   "max": 14.0
+  },
+  {
+   "feature": "num_lab_procedures",
+   "count": 69987.0,
+   "mean": 42.88,
+   "std": 19.89,
+   "min": 1.0,
+   "25%": 31.0,
+   "50%": 44.0,
+   "75%": 57.0,
+   "max": 132.0
+  },
+  {
+   "feature": "num_procedures",
+   "count": 69987.0,
+   "mean": 1.43,
+   "std": 1.76,
+   "min": 0.0,
+   "25%": 0.0,
+   "50%": 1.0,
+   "75%": 2.0,
+   "max": 6.0
+  },
+  {
+   "feature": "num_medications",
+   "count": 69987.0,
+   "mean": 15.67,
+   "std": 8.29,
+   "min": 1.0,
+   "25%": 10.0,
+   "50%": 14.0,
+   "75%": 20.0,
+   "max": 81.0
+  },
+  {
+   "feature": "number_outpatient",
+   "count": 69987.0,
+   "mean": 0.28,
+   "std": 1.06,
+   "min": 0.0,
+   "25%": 0.0,
+   "50%": 0.0,
+   "75%": 0.0,
+   "max": 42.0
+  },
+  {
+   "feature": "number_emergency",
+   "count": 69987.0,
+   "mean": 0.1,
+   "std": 0.51,
+   "min": 0.0,
+   "25%": 0.0,
+   "50%": 0.0,
+   "75%": 0.0,
+   "max": 42.0
+  },
+  {
+   "feature": "number_inpatient",
+   "count": 69987.0,
+   "mean": 0.18,
+   "std": 0.6,
+   "min": 0.0,
+   "25%": 0.0,
+   "50%": 0.0,
+   "75%": 0.0,
+   "max": 12.0
+  },
+  {
+   "feature": "number_diagnoses",
+   "count": 69987.0,
+   "mean": 7.22,
+   "std": 2.0,
+   "min": 1.0,
+   "25%": 6.0,
+   "50%": 8.0,
+   "75%": 9.0,
+   "max": 16.0
+  },
+  {
+   "feature": "age_num",
+   "count": 69987.0,
+   "mean": 65.44,
+   "std": 15.97,
+   "min": 5.0,
+   "25%": 55.0,
+   "50%": 65.0,
+   "75%": 75.0,
+   "max": 95.0
+  }
+ ],
+ "outliers": [
+  {
+   "feature": "time_in_hospital",
+   "outliers": 1403,
+   "pct": 2.0,
+   "skew": 1.18
+  },
+  {
+   "feature": "num_lab_procedures",
+   "outliers": 98,
+   "pct": 0.1,
+   "skew": -0.22
+  },
+  {
+   "feature": "num_procedures",
+   "outliers": 3845,
+   "pct": 5.5,
+   "skew": 1.23
+  },
+  {
+   "feature": "num_medications",
+   "outliers": 1868,
+   "pct": 2.7,
+   "skew": 1.43
+  },
+  {
+   "feature": "number_outpatient",
+   "outliers": 9122,
+   "pct": 13.0,
+   "skew": 9.7
+  },
+  {
+   "feature": "number_emergency",
+   "outliers": 5101,
+   "pct": 7.3,
+   "skew": 21.23
+  },
+  {
+   "feature": "number_inpatient",
+   "outliers": 8195,
+   "pct": 11.7,
+   "skew": 5.59
+  },
+  {
+   "feature": "number_diagnoses",
+   "outliers": 235,
+   "pct": 0.3,
+   "skew": -0.72
+  },
+  {
+   "feature": "age_num",
+   "outliers": 687,
+   "pct": 1.0,
+   "skew": -0.63
+  }
+ ],
+ "top_pairs": [
+  {
+   "a": "time_in_hospital",
+   "b": "num_medications",
+   "r": 0.468
+  },
+  {
+   "a": "num_procedures",
+   "b": "num_medications",
+   "r": 0.401
+  },
+  {
+   "a": "time_in_hospital",
+   "b": "num_lab_procedures",
+   "r": 0.332
+  },
+  {
+   "a": "num_lab_procedures",
+   "b": "num_medications",
+   "r": 0.259
+  },
+  {
+   "a": "num_medications",
+   "b": "number_diagnoses",
+   "r": 0.259
+  },
+  {
+   "a": "number_diagnoses",
+   "b": "age_num",
+   "r": 0.253
+  }
+ ],
+ "target_corr": [
+  {
+   "feature": "number_inpatient",
+   "r": 0.146
+  },
+  {
+   "feature": "number_diagnoses",
+   "r": 0.111
+  },
+  {
+   "feature": "number_emergency",
+   "r": 0.077
+  },
+  {
+   "feature": "age_num",
+   "r": 0.076
+  },
+  {
+   "feature": "number_outpatient",
+   "r": 0.066
+  },
+  {
+   "feature": "time_in_hospital",
+   "r": 0.065
+  },
+  {
+   "feature": "num_lab_procedures",
+   "r": 0.055
+  },
+  {
+   "feature": "num_medications",
+   "r": 0.039
+  },
+  {
+   "feature": "num_procedures",
+   "r": -0.026
+  }
+ ],
+ "categorical_unique": [
+  {
+   "feature": "race",
+   "unique": 6,
+   "top": "Caucasian",
+   "top_pct": 74.7
+  },
+  {
+   "feature": "gender",
+   "unique": 2,
+   "top": "Female",
+   "top_pct": 53.2
+  },
+  {
+   "feature": "admission_type_id",
+   "unique": 8,
+   "top": "1",
+   "top_pct": 50.7
+  },
+  {
+   "feature": "discharge_disposition_id",
+   "unique": 21,
+   "top": "1",
+   "top_pct": 63.3
+  },
+  {
+   "feature": "admission_source_id",
+   "unique": 17,
+   "top": "7",
+   "top_pct": 53.3
+  },
+  {
+   "feature": "payer_code",
+   "unique": 18,
+   "top": "Unknown",
+   "top_pct": 43.5
+  },
+  {
+   "feature": "medical_specialty",
+   "unique": 71,
+   "top": "Unknown",
+   "top_pct": 48.1
+  },
+  {
+   "feature": "diag_1",
+   "unique": 10,
+   "top": "Circulatory",
+   "top_pct": 30.6
+  },
+  {
+   "feature": "diag_2",
+   "unique": 10,
+   "top": "Circulatory",
+   "top_pct": 31.6
+  },
+  {
+   "feature": "diag_3",
+   "unique": 10,
+   "top": "Circulatory",
+   "top_pct": 29.8
+  },
+  {
+   "feature": "max_glu_serum",
+   "unique": 4,
+   "top": "None",
+   "top_pct": 95.2
+  },
+  {
+   "feature": "A1Cresult",
+   "unique": 4,
+   "top": "None",
+   "top_pct": 81.6
+  },
+  {
+   "feature": "metformin",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 78.7
+  },
+  {
+   "feature": "repaglinide",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 98.7
+  },
+  {
+   "feature": "nateglinide",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 99.3
+  },
+  {
+   "feature": "chlorpropamide",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 99.9
+  },
+  {
+   "feature": "glimepiride",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 94.7
+  },
+  {
+   "feature": "acetohexamide",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "glipizide",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 87.1
+  },
+  {
+   "feature": "glyburide",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 88.9
+  },
+  {
+   "feature": "tolbutamide",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "pioglitazone",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 92.5
+  },
+  {
+   "feature": "rosiglitazone",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 93.3
+  },
+  {
+   "feature": "acarbose",
+   "unique": 3,
+   "top": "No",
+   "top_pct": 99.7
+  },
+  {
+   "feature": "miglitol",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "troglitazone",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "tolazamide",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "insulin",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 49.0
+  },
+  {
+   "feature": "glyburide-metformin",
+   "unique": 4,
+   "top": "No",
+   "top_pct": 99.3
+  },
+  {
+   "feature": "glipizide-metformin",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "metformin-rosiglitazone",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "metformin-pioglitazone",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 100.0
+  },
+  {
+   "feature": "change",
+   "unique": 2,
+   "top": "No",
+   "top_pct": 55.0
+  },
+  {
+   "feature": "diabetesMed",
+   "unique": 2,
+   "top": "Yes",
+   "top_pct": 76.2
+  }
+ ],
+ "class_distribution": {
+  "Not readmitted": 41476,
+  "Readmitted": 28511
+ },
+ "class_distribution_raw": {
+  "NO": 54864,
+  ">30": 35545,
+  "<30": 11357
+ },
+ "readmit_rate": 40.7,
+ "imbalance_ratio": 1.45,
+ "rows": 69987,
+ "charts": [
+  {
+   "file": "target_distribution.png",
+   "title": "Target / class distribution",
+   "section": "Target",
+   "desc": "Left: the three original outcome values. Right: the binary target used for modelling. 40.7% of the cleaned patients were readmitted, so the classes are moderately imbalanced (ratio 1.45:1) - accuracy alone is not enough, which is why precision, recall, F1 and ROC-AUC are reported."
+  },
+  {
+   "file": "missing_values.png",
+   "title": "Missing values",
+   "section": "Data quality",
+   "desc": "Only a few columns contain missing values. weight is almost entirely missing and is dropped; payer_code and medical_specialty are partly missing and are kept with an explicit 'Unknown' category."
+  },
+  {
+   "file": "feature_histogram.png",
+   "title": "Histograms of numeric features",
+   "section": "Distributions",
+   "desc": "Shape of every numeric feature. Most utilisation counts (prior outpatient / emergency / inpatient visits, procedures) are heavily right-skewed: most patients have 0 or 1, a few have many. time_in_hospital and num_medications are right-skewed too."
+  },
+  {
+   "file": "distribution_plots.png",
+   "title": "Distribution plots by outcome",
+   "section": "Distributions",
+   "desc": "Density curves of key clinical numbers split by outcome. Large overlap between the two curves means the single feature separates the groups only weakly, which explains why readmission is a hard prediction problem."
+  },
+  {
+   "file": "boxplot.png",
+   "title": "Box plots by outcome (outliers)",
+   "section": "Outliers",
+   "desc": "Box plots show the median, quartiles and outliers (dots beyond 1.5 x IQR). number_outpatient has the largest share of outliers (13.0%). Outliers are real clinical cases (very long stays, many visits), so they are kept and handled by scaling and tree-based models rather than deleted."
+  },
+  {
+   "file": "correlation_matrix.png",
+   "title": "Correlation heatmap",
+   "section": "Relationships",
+   "desc": "Pearson correlation between numeric features and the target. The strongest feature-feature correlation is time_in_hospital vs num_medications (r = 0.468). The numeric feature most correlated with readmission is number_inpatient (r = 0.146) - correlations with the target are all weak, so models must combine many features."
+  },
+  {
+   "file": "scatter_plot.png",
+   "title": "Scatter plots",
+   "section": "Relationships",
+   "desc": "A random sample of 4,000 patients. Longer stays go together with more medications and lab procedures, but readmitted (red) and not-readmitted (blue) patients are heavily mixed - no simple boundary exists."
+  },
+  {
+   "file": "age_readmission.png",
+   "title": "Age and readmission",
+   "section": "Categorical features",
+   "desc": "Most patients are between 50 and 90 years old. The line shows how the percentage of readmitted patients changes with age band."
+  },
+  {
+   "file": "count_plots.png",
+   "title": "Count plots of categorical features",
+   "section": "Categorical features",
+   "desc": "Count of patients in the most frequent categories of eight categorical features, coloured by outcome. Compare the blue/red ratio between bars: categories where the red bar is relatively taller have a higher share of readmitted patients."
+  },
+  {
+   "file": "prior_visits.png",
+   "title": "Readmission rate vs prior inpatient visits",
+   "section": "Target",
+   "desc": "The readmission rate rises from 38% for patients with no prior inpatient stay to 84% for patients with five or more - prior hospital use is one of the clearest risk signals."
+  },
+  {
+   "file": "pairplot.png",
+   "title": "Pairwise relationships",
+   "section": "Relationships",
+   "desc": "Every combination of four key numeric features for a 1,500-patient sample. Diagonal: distribution per outcome. Off-diagonal: scatter plots. Considerable overlap again confirms that no pair of features alone separates the outcomes."
+  }
+ ]
+}

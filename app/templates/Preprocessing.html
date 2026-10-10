@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Preprocessing{% endblock %}
+{% block subtitle %}Leakage-safe cleaning, encoding and scaling - before vs after{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>Workflow</h2>
+  <div class="flow">
+    <span class="node">Load data</span><span class="arrow">&rarr;</span><span class="node">Clean (rule-based)</span><span class="arrow">&rarr;</span>
+    <span class="node">Separate X and y</span><span class="arrow">&rarr;</span><span class="node">Train / test split</span><span class="arrow">&rarr;</span>
+    <span class="node">Fit imputer + scaler + encoder on TRAIN</span><span class="arrow">&rarr;</span><span class="node">Transform train &amp; test</span><span class="arrow">&rarr;</span>
+    <span class="node">Train models</span><span class="arrow">&rarr;</span><span class="node">Save pipeline</span>
+  </div>
+  <div class="alert alert-ok" style="margin:16px 0 0"><b>No data leakage:</b> the split happens before any statistic is learned. Medians, means, standard deviations and category lists are computed on the {{ p.train_size|num }} training rows only; the {{ p.test_size|num }} test rows are only transformed. Only the first encounter of each patient is kept so the same patient can never appear in both sets.</div>
+</div>
+
+<div class="section-title">Before vs after</div>
+<div class="grid grid-2">
+  <div class="card" style="border-top:4px solid var(--red)"><h3>Before preprocessing</h3>
+    <div class="grid grid-2" style="gap:12px">
+      <div class="metric"><div class="v">{{ p.original_shape[0]|num }} x {{ p.original_shape[1] }}</div><div class="l">Original shape</div></div>
+      <div class="metric"><div class="v">{{ p.missing_before_total|num }}</div><div class="l">Missing values</div></div></div>
+    <p class="chart-caption">Missing values per column: {% for c, v in p.missing_before.items() %}<span class="badge badge-red">{{ c }}: {{ v|num }}</span> {% endfor %}</p>
+    <div class="table-wrap"><table class="data"><thead><tr>{% for c in p.sample_before.columns %}<th>{{ c }}</th>{% endfor %}</tr></thead><tbody>
+    {% for r in p.sample_before.rows %}<tr>{% for v in r %}<td>{{ v if v != '' else '-' }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div></div>
+  <div class="card" style="border-top:4px solid var(--accent)"><h3>After preprocessing</h3>
+    <div class="grid grid-2" style="gap:12px">
+      <div class="metric"><div class="v">{{ p.cleaned_shape[0]|num }} x {{ p.cleaned_shape[1] }}</div><div class="l">Cleaned shape</div></div>
+      <div class="metric"><div class="v">{{ p.missing_after_cleaning }}</div><div class="l">Missing values</div></div></div>
+    <p class="chart-caption">{{ p.n_final_features }} model input columns = {{ p.numeric_features|length }} scaled numeric + {{ p.n_encoded_features }} one-hot encoded. First 10 transformed columns of 5 training rows:</p>
+    <div class="table-wrap"><table class="data"><thead><tr>{% for c in p.sample_after.columns %}<th>{{ c }}</th>{% endfor %}</tr></thead><tbody>
+    {% for r in p.sample_after.rows %}<tr>{% for v in r %}<td class="num">{{ v }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div></div>
+</div>
+
+<div class="section-title">Cleaning steps</div>
+<div class="grid grid-2">
+  <div class="card"><h3>Rows removed</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Step</th><th class="num">Before</th><th class="num">After</th><th class="num">Removed</th></tr></thead><tbody>
+    {% for s in p.steps %}<tr><td><b>{{ s.step }}</b><div class="muted small" style="white-space:normal">{{ s.detail }}</div></td><td class="num">{{ s.rows_before|num }}</td><td class="num">{{ s.rows_after|num }}</td><td class="num">{{ s.removed|num }}</td></tr>{% endfor %}</tbody></table></div></div>
+  <div class="card"><h3>Columns dropped</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Column</th><th>Reason</th></tr></thead><tbody>
+    {% for d in p.dropped_columns %}<tr><td><b>{{ d.column }}</b></td><td style="white-space:normal">{{ d.reason }}</td></tr>{% endfor %}</tbody></table></div>
+    <h3 style="margin-top:18px">Missing values handled</h3>
+    <p class="small">Categorical gaps are filled with an explicit <code>Unknown</code> category (a missing payer or specialty can itself be informative): {% for c, v in p.filled_unknown.items() %}<span class="badge badge-amber">{{ c }}: {{ v|num }}</span> {% endfor %}. The saved pipeline also contains imputers (median for numbers, "Unknown" for text) so unseen blanks cannot break prediction.</p></div>
+</div>
+
+<div class="card"><h3>Derived / transformed features</h3><ul class="list-clean">{% for d in p.derived %}<li>{{ d }}</li>{% endfor %}</ul></div>
+
+<div class="section-title">Encoding, scaling and split</div>
+<div class="grid grid-2">
+  <div class="card"><h3>Scaled numeric features (StandardScaler, fit on train)</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Feature</th><th class="num">Mean after scaling</th><th class="num">Std after scaling</th></tr></thead><tbody>
+    {% for c in p.scaled_check %}<tr><td>{{ c.feature }}</td><td class="num">{{ c.mean }}</td><td class="num">{{ c.std }}</td></tr>{% endfor %}</tbody></table></div>
+    <p class="chart-caption">Mean ~ 0 and standard deviation ~ 1 on the training data confirm the scaling worked. Scaling matters for Logistic Regression, KNN, SVM and K-Means.</p></div>
+  <div class="card"><h3>One-hot encoded categorical features</h3>
+    <div class="table-wrap scroll-y" style="max-height:330px"><table class="data"><thead><tr><th>Feature</th><th class="num">Columns created</th></tr></thead><tbody>
+    {% for c in p.encoded_cardinality %}<tr><td>{{ c.feature }}</td><td class="num">{{ c.categories_after_encoding }}</td></tr>{% endfor %}</tbody></table></div>
+    <p class="chart-caption">Categories with fewer than 1% of training rows are grouped into one "infrequent" column; unseen categories at prediction time are handled the same way.</p></div>
+</div>
+
+<div class="card"><h3>Train / test split ({{ (p.test_fraction * 100)|round|int }}% test, stratified, random_state = 42)</h3>
+  <div class="grid grid-4">
+    <div class="metric"><div class="v">{{ p.train_size|num }}</div><div class="l">Training rows</div></div>
+    <div class="metric"><div class="v">{{ p.test_size|num }}</div><div class="l">Test rows</div></div>
+    <div class="metric"><div class="v" style="font-size:1.05rem">{% for k, v in p.train_balance.items() %}{{ k }}: {{ v|num }}<br>{% endfor %}</div><div class="l">Train class balance</div></div>
+    <div class="metric"><div class="v" style="font-size:1.05rem">{% for k, v in p.test_balance.items() %}{{ k }}: {{ v|num }}<br>{% endfor %}</div><div class="l">Test class balance</div></div>
+  </div></div>
+{% endblock %}

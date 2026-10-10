@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Exploratory Data Analysis{% endblock %}
+{% block subtitle %}Charts and statistics generated from the cleaned dataset ({{ eda.rows|num }} patients){% endblock %}
+{% block content %}
+<div class="grid grid-4" style="margin-bottom:22px">
+  <div class="stat c-blue"><div class="stat-label">Not readmitted</div><div class="stat-value">{{ eda.class_distribution['Not readmitted']|num }}</div></div>
+  <div class="stat c-red"><div class="stat-label">Readmitted</div><div class="stat-value">{{ eda.class_distribution['Readmitted']|num }}</div></div>
+  <div class="stat c-teal"><div class="stat-label">Readmission rate</div><div class="stat-value">{{ eda.readmit_rate }}%</div></div>
+  <div class="stat c-amber"><div class="stat-label">Class ratio</div><div class="stat-value">{{ eda.imbalance_ratio }} : 1</div></div>
+</div>
+
+<div class="grid grid-2">
+  <div class="card"><h3>Numeric feature summary</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Feature</th><th class="num">Mean</th><th class="num">Std</th><th class="num">Min</th><th class="num">50%</th><th class="num">Max</th></tr></thead><tbody>
+    {% for r in eda.describe %}<tr><td>{{ r.feature }}</td><td class="num">{{ r['mean'] }}</td><td class="num">{{ r['std'] }}</td><td class="num">{{ r['min'] }}</td><td class="num">{{ r['50%'] }}</td><td class="num">{{ r['max'] }}</td></tr>{% endfor %}</tbody></table></div></div>
+  <div class="card"><h3>Outliers (1.5 x IQR rule)</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Feature</th><th class="num">Outliers</th><th class="num">%</th><th class="num">Skew</th></tr></thead><tbody>
+    {% for o in eda.outliers %}<tr><td>{{ o.feature }}</td><td class="num">{{ o.outliers|num }}</td><td class="num">{{ o.pct }}%</td><td class="num">{{ o.skew }}</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+
+<div class="grid grid-2">
+  <div class="card"><h3>Correlation with readmission</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Feature</th><th class="num">Pearson r</th><th style="width:40%"></th></tr></thead><tbody>
+    {% for t in eda.target_corr %}<tr><td>{{ t.feature }}</td><td class="num">{{ t.r }}</td><td><div class="bar"><i style="width:{{ (t.r|abs * 400)|round|int }}%;background:{{ 'var(--red)' if t.r > 0 else 'var(--blue)' }}"></i></div></td></tr>{% endfor %}</tbody></table></div></div>
+  <div class="card"><h3>Strongest feature-feature correlations</h3>
+    <div class="table-wrap"><table class="data"><thead><tr><th>Feature A</th><th>Feature B</th><th class="num">r</th></tr></thead><tbody>
+    {% for p in eda.top_pairs %}<tr><td>{{ p.a }}</td><td>{{ p.b }}</td><td class="num">{{ p.r }}</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+
+<div class="card"><h3>Categorical features: unique values</h3>
+  <div class="table-wrap scroll-y" style="max-height:340px"><table class="data"><thead><tr><th>Feature</th><th class="num">Unique values</th><th>Most common</th><th class="num">Share</th></tr></thead><tbody>
+  {% for c in eda.categorical_unique %}<tr><td>{{ c.feature }}</td><td class="num">{{ c.unique }}</td><td>{{ c.top }}</td><td class="num">{{ c.top_pct }}%</td></tr>{% endfor %}</tbody></table></div></div>
+
+{% for section, charts in sections.items() %}
+<div class="section-title">{{ section }}</div>
+{% for c in charts %}
+<div class="card chart"><h2>{{ c.title }}</h2>
+  <img src="{{ url_for('static', filename='charts/' ~ c.file) }}" alt="{{ c.title }}" loading="lazy">
+  <p class="chart-caption"><b>What it shows:</b> {{ c.desc }}</p></div>
+{% endfor %}{% endfor %}
+{% endblock %}
